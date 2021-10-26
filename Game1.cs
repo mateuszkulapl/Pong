@@ -75,7 +75,19 @@ namespace Pong
         }
         private void screenCollider()
         {
-           
+            Vector2 offfetVector = position + new Vector2(0, r);
+            if ((offfetVector).Y > graphicViewport.Height)
+            {
+                speed.Y *= -1;
+            }
+            else
+            {
+                offfetVector = position + new Vector2(0, -r);
+                if ((offfetVector).Y <= 0)
+                {
+                    speed.Y *= -1;
+                }
+            }
 
         }
 
