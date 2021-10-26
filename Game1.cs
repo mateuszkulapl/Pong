@@ -79,11 +79,12 @@ namespace Pong
 
         }
 
-        public bool isEnd()
+        public bool isEnd(Paddle lPad, Paddle rPad)
         {
             Vector2 offfetVector = position + new Vector2(r, 0);
             if ((offfetVector).X > graphicViewport.Width)
             {
+                lPad.addPoints();
                 return true;
             }
             else
@@ -91,6 +92,7 @@ namespace Pong
                 offfetVector = position + new Vector2(-r, 0);
                 if ((offfetVector).X <= 0)
                 {
+                    rPad.addPoints();
                     return true;
                 }
             }
@@ -134,7 +136,10 @@ namespace Pong
             }
 
         }
-
+        public void addPoints(int points=1)
+        {
+            this.points += points;
+        }
         public Rectangle getPosition()
         {
             return this.screenPosition;
@@ -250,7 +255,7 @@ namespace Pong
             rPad.chechMove(kb);
             lPad.chechMove(kb);
 
-            bool isEnd=ball.isEnd();//todo: implement
+            bool isEnd=ball.isEnd(lPad,rPad);//todo: implement
 
             base.Update(gameTime);
         }
