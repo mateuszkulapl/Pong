@@ -20,6 +20,7 @@ namespace Pong
         Texture2D lPadTexture;
         Texture2D rPadTexture;
         Texture2D ballTexture;
+        private SpriteFont font;
 
         private Paddle lPad;
         private Paddle rPad;
@@ -50,6 +51,7 @@ namespace Pong
 
             lPadTexture = Content.Load<Texture2D>(@"paddle1");
             rPadTexture = Content.Load<Texture2D>(@"paddle2");
+            font = Content.Load<SpriteFont>("font1");
 
             lPad = new Paddle(lPadTexture, GraphicsDevice.Viewport, Side.Left, Keys.Q, Keys.A);
             rPad = new Paddle(rPadTexture, GraphicsDevice.Viewport, Side.Right, Keys.P, Keys.L);
@@ -69,13 +71,14 @@ namespace Pong
             {
                 StartGame();
             }
+            if (active)
+            {
+                ball.Move(lPad, rPad);
+                rPad.CheckMove(kb);
+                lPad.CheckMove(kb);
+            }
 
-            ball.Move(lPad, rPad);
-            rPad.CheckMove(kb);
-            lPad.CheckMove(kb);
-
-
-            if (ball.IsEnd(lPad, rPad) && active == true)
+            if (active == true && ball.IsEnd(lPad, rPad))
             {
                 EndGame();
             }
@@ -109,9 +112,17 @@ namespace Pong
             ball.Draw(_spriteBatch);
             lPad.Draw(_spriteBatch);
             rPad.Draw(_spriteBatch);
+            drawResult(_spriteBatch);
 
             _spriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        private void drawResult(SpriteBatch _spriteBatch)
+        {
+            string result = lPad.GetPoints() + ":" + rPad.GetPoints();
+            Vector2 resultSize = font.MeasureString(result);
+            _spriteBatch.DrawString(font, result, new Vector2(GraphicsDevice.Viewport.Width / 2 - resultSize.X / 2, 0), Color.White);
         }
     }
 }

@@ -33,15 +33,16 @@ namespace Pong
         }
         private void resetPosition()
         {
-            int width = 20;
+            int width = 5;
             int height = 100;
+            int gap = 10;
             if (side == Side.Left)
             {
-                screenPosition = new Rectangle(0, graphicViewport.Height / 2 - height / 2, width, height);
+                screenPosition = new Rectangle(0 + gap, graphicViewport.Height / 2 - height / 2, width, height);
             }
             if (side == Side.Right)
             {
-                screenPosition = new Rectangle(graphicViewport.Width - width, graphicViewport.Height / 2 - height / 2, width, height);
+                screenPosition = new Rectangle(graphicViewport.Width - gap - width, graphicViewport.Height / 2 - height / 2, width, height);
             }
 
         }

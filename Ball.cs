@@ -156,7 +156,9 @@ namespace Pong
                 {
                     float ballPaddleDistance = paddle.GetScreenPosition().X - oldPosition.X;
                     float onPaddleY = oldPosition.Y + yOffset * (ballPaddleDistance / xOffset);
-                    if (paddle.GetScreenPosition().Contains(paddle.GetScreenPosition().X, onPaddleY))
+                    Rectangle paddleScreenPositionWithOffset = paddle.GetScreenPosition();
+                    paddleScreenPositionWithOffset.Inflate(0, r);
+                    if (paddleScreenPositionWithOffset.Contains(paddle.GetScreenPosition().X, onPaddleY))
                     {
                         position.X = paddle.GetScreenPosition().X - r;
                         position.Y = onPaddleY;
@@ -174,7 +176,9 @@ namespace Pong
                 {
                     float ballPaddleDistance = paddle.GetScreenPosition().X + paddle.GetScreenPosition().Width - oldPosition.X;
                     float onPaddleY = oldPosition.Y + yOffset * (ballPaddleDistance / (xOffset));
-                    if (paddle.GetScreenPosition().Contains(paddle.GetScreenPosition().X + paddle.GetScreenPosition().Width - 1, onPaddleY))
+                    Rectangle paddleScreenPositionWithOffset = paddle.GetScreenPosition();
+                    paddleScreenPositionWithOffset.Inflate(0, r);
+                    if (paddleScreenPositionWithOffset.Contains(paddle.GetScreenPosition().X + paddle.GetScreenPosition().Width - 1, onPaddleY))
                     {
                         position.X = paddle.GetScreenPosition().X + paddle.GetScreenPosition().Width + r;
                         position.Y = onPaddleY;
