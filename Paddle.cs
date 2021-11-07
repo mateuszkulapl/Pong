@@ -49,7 +49,7 @@ namespace Pong
         {
             resetPosition();
             this.active = true;
-            
+
         }
         public void End()
         {
@@ -106,6 +106,6 @@ namespace Pong
             else
                 screenPosition.Y = graphicViewport.Height - screenPosition.Height;
         }
-        
+
     }
 }

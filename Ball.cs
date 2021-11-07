@@ -14,7 +14,7 @@ namespace Pong
         Viewport graphicViewport;
         float r;
 
-        
+
         public Ball(Texture2D texture, Viewport graphicViewport)
         {
             this.texture = texture;
@@ -30,7 +30,7 @@ namespace Pong
             Rectangle screenPosition = new Rectangle((int)(position.X - r), (int)(position.Y - r), (int)(2 * r), (int)(2 * r));
             spriteBatch.Draw(texture, screenPosition, Color.White);
         }
-        
+
         internal void Start(int xSpeed = 5)
         {
             Random rnd = new Random();
@@ -40,7 +40,7 @@ namespace Pong
             int directionY = 1;
             if (rnd.Next(0, 2) == 1)
                 directionY = -1;
-            this.speed = new Vector2((xSpeed * directionX), (xSpeed / 2* directionY));
+            this.speed = new Vector2((xSpeed * directionX), (xSpeed / 2 * directionY));
             this.position = new Vector2((int)graphicViewport.Width / 2, (int)graphicViewport.Height / 2);
         }
         /// <summary>
@@ -120,7 +120,7 @@ namespace Pong
             }
             else
             {
-                if (position.X < lPad.GetScreenPosition().X+rPad.GetScreenPosition().Width)
+                if (position.X < lPad.GetScreenPosition().X + rPad.GetScreenPosition().Width)
                 {
                     rPad.AddPoints();
                     return true;

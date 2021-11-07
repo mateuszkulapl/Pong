@@ -103,12 +103,9 @@ namespace Pong
 
         protected override void Draw(GameTime gameTime)
         {
-
             _spriteBatch.Begin();
-
             _spriteBatch.Draw(background, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
 
-            // TODO: Add your drawing code here
             ball.Draw(_spriteBatch);
             lPad.Draw(_spriteBatch);
             rPad.Draw(_spriteBatch);
