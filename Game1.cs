@@ -38,52 +38,48 @@ namespace Pong
         }
         internal void Start(int speed=5)
         {
-            this.speed = new Vector2(speed, speed/2);
+            this.speed = new Vector2(speed, 0);
         }
         internal void Move(Paddle l, Paddle r)
         {
+            Vector2 oldPosition = position;
             position += speed;
-            checkCollision(l,r);
+            CheckCollision(l,r, oldPosition);
+            Console.WriteLine($"position: {position}");
         }
-        private void checkCollision(Paddle l, Paddle r)
+        private void CheckCollision(Paddle l, Paddle r, Vector2 oldPosition)
+
         {
-            paddleColider(l);
-
-            paddleColider(r);
-
+            paddleColider(l, oldPosition);
+            paddleColider(r, oldPosition);
             screenCollider();
 
         }
 
         
-        private void paddleColider(Paddle paddle)
+        private void paddleColider(Paddle paddle, Vector2 oldPosition)
         {
-            Vector2 offfetVector = position + new Vector2(r, 0);
-            if(paddle.getPosition().Contains(offfetVector))
+            Vector2 offetVector = position + new Vector2(r, 0);
+
+            if (paddle.bounceBall(oldPosition, position, r))
             {
-                speed.X *= -1;
-            }
-            else
-            {
-                offfetVector = position + new Vector2(-r, 0);
-                if (paddle.getPosition().Contains(offfetVector))
-                {
-                    speed.X *= -1;
-                }
+                speed.X *= -1.05f;
+                this.position.X = paddle.getPosition().X;
+                Console.WriteLine("speed: "+ speed);
             }
 
         }
         private void screenCollider()
         {
-            Vector2 offfetVector = position + new Vector2(0, r);
-            if ((offfetVector).Y > graphicViewport.Height)
+            Vector2 offetVector = position + new Vector2(0, r);
+            if ((offetVector).Y > graphicViewport.Height)
             {
                 speed.Y *= -1;
             }
             else
             {
-                offfetVector = position + new Vector2(0, -r);
-                if ((offfetVector).Y <= 0)
+                offetVector = position + new Vector2(0, -r);
+                if ((offetVector).Y <= 0)
                 {
                     speed.Y *= -1;
                 }
@@ -93,16 +89,15 @@ namespace Pong
 
         public bool isEnd(Paddle lPad, Paddle rPad)
         {
-            Vector2 offfetVector = position + new Vector2(r, 0);
-            if ((offfetVector).X > graphicViewport.Width)
+            if (position.X > graphicViewport.Width)
             {
                 lPad.addPoints();
                 return true;
             }
             else
             {
-                offfetVector = position + new Vector2(-r, 0);
-                if ((offfetVector).X <= 0)
+               
+                if (position.X < 0)
                 {
                     rPad.addPoints();
                     return true;
@@ -197,6 +192,55 @@ namespace Pong
             this.active = false;
         }
 
+        public int getPoints()
+        {
+            return points;
+        }
+
+        public bool bounceBall(Vector2 oldPosition, Vector2 newPosition, float ballRadius)
+        {
+            Vector2 leftPos;
+            Vector2 rightPos;
+            if (oldPosition.X<newPosition.Y)
+            {
+                leftPos = oldPosition;
+                rightPos = newPosition;
+            }
+            else
+            {
+                leftPos = newPosition;
+                rightPos = oldPosition;
+            }
+
+            float yOffset = rightPos.Y - leftPos.Y;
+            float xOffset = rightPos.X - leftPos.X;
+
+            if (this.position==position.Right)
+            {
+                if(newPosition.X+ballRadius>=this.screenPosition.X)
+                {
+                    float ballPaddleDistance = this.screenPosition.X - oldPosition.X;
+                    float onPaddleY = oldPosition.Y + yOffset * (ballPaddleDistance/xOffset);
+                    return this.screenPosition.Contains(this.screenPosition.X, onPaddleY);
+                }
+                else
+                    return false;
+            }
+
+            if (this.position == position.Left)
+            {
+                if (newPosition.X -ballRadius <= this.screenPosition.X+ this.screenPosition.Width)
+                {
+                    float ballPaddleDistance = this.screenPosition.X+this.screenPosition.Width - oldPosition.X;
+                    float onPaddleY = oldPosition.Y + yOffset * (ballPaddleDistance /(xOffset));
+                    return this.screenPosition.Contains(this.screenPosition.X+this.screenPosition.Width-1, onPaddleY);
+                }
+                else
+                    return false;
+            }
+            return false;
+
+        }
 
     }
     public class Game1 : Game
@@ -268,6 +312,10 @@ namespace Pong
             lPad.chechMove(kb);
 
             bool isEnd=ball.isEnd(lPad,rPad);//todo: implement
+            if(isEnd)
+            {
+                //Console.WriteLine("END !!!!!!!!!!!!!!!"+lPad.getPoints()+":"+rPad.getPoints());
+            }    
 
             base.Update(gameTime);
         }
